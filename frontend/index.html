@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt to Plot</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Prompt to Plot</h1>
+            <p>Autonomous Agentic Business Intelligence</p>
+        </header>
+        
+        <main>
+            <div class="input-section glass-panel">
+                <input type="text" id="prompt-input" placeholder="Ask a question about your data (e.g. 'Show me top regions by revenue')" autofocus autocomplete="off" />
+                <button id="analyze-btn">Analyze</button>
+            </div>
+            
+            <div id="status-container" class="status-container hidden">
+                <div class="spinner"></div>
+                <span id="status-text">Agent is thinking...</span>
+            </div>
+            
+            <div id="error-container" class="error-container hidden glass-panel">
+                <h3>Agent Failed</h3>
+                <p id="error-text"></p>
+            </div>
+
+            <div id="results-section" class="results-section hidden">
+                <div class="chart-container glass-panel">
+                    <div id="plotly-div"></div>
+                </div>
+                
+                <div class="insight-container glass-panel">
+                    <h3>Data Insight</h3>
+                    <div class="insight-grid">
+                        <div class="insight-card">
+                            <h4>Fact</h4>
+                            <p id="fact-text"></p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Insight</h4>
+                            <p id="insight-text"></p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Potential Action</h4>
+                            <p id="action-text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <details class="sql-container glass-panel">
+                    <summary>View Execution Trace (Generated SQL)</summary>
+                    <pre><code id="sql-text"></code></pre>
+                </details>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

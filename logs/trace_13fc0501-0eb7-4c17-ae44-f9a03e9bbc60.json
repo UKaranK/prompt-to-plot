@@ -1,0 +1,26 @@
+{
+    "trace_id": "13fc0501-0eb7-4c17-ae44-f9a03e9bbc60",
+    "timestamp": "2026-09-17T16:01:50.832917",
+    "execution_journal": {
+        "user_prompt": "Show me the top 5 regions by revenue.",
+        "sql_retries": 0,
+        "errors": "",
+        "status": "insight_generated",
+        "intent": "Show me the top 5 regions by revenue.",
+        "dimensions": [
+            "Region, Revenue"
+        ],
+        "semantic_mapping": "No semantic matches found for 'Region, Revenue'. Try using different business terminology.",
+        "generated_sql": "SELECT region, SUM(revenue) AS total_revenue FROM sales GROUP BY region ORDER BY total_revenue DESC LIMIT 5;",
+        "sql_validation": "VALID",
+        "visualization": {
+            "chart_type": "bar",
+            "x_axis": "region",
+            "y_axis": "total_revenue"
+        },
+        "insights": "The North region leads overall performance with $13,000 in total revenue, generating over 34% of the $37,800 combined total across all four available regions. The West region follows as the second-highest contributor at $9,400, while South ($7,800) and East ($7,600) round out the remaining list.",
+        "query_result_metadata": {
+            "rows_returned": 4
+        }
+    }
+}

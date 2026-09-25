@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+pydantic-settings
+duckdb
+pandas
+plotly
+google-genai
+langgraph
+pytest

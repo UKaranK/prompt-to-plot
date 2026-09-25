@@ -1,0 +1,47 @@
+{
+  "tables": {
+    "sales": {
+      "description": "Sales transaction data including revenue and units sold by region and product",
+      "columns": {
+        "date": {
+          "type": "DATE",
+          "role": "dimension",
+          "description": "The date of the transaction",
+          "synonyms": ["time", "day", "month", "year", "when"]
+        },
+        "region": {
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "The geographical region of the sale (e.g., North, South)",
+          "synonyms": ["area", "location", "territory"]
+        },
+        "account": {
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "The name of the customer company",
+          "synonyms": ["customer", "client", "company", "buyer"]
+        },
+        "product": {
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "The item that was sold",
+          "synonyms": ["item", "widget", "goods"]
+        },
+        "revenue": {
+          "type": "DOUBLE",
+          "role": "measure",
+          "description": "The total monetary value of the sale",
+          "synonyms": ["sales", "income", "money", "value", "sales amount"],
+          "allowed_aggregations": ["SUM", "AVG", "MIN", "MAX"]
+        },
+        "units": {
+          "type": "INTEGER",
+          "role": "measure",
+          "description": "The physical number of items sold",
+          "synonyms": ["quantity", "volume", "amount sold", "count"],
+          "allowed_aggregations": ["SUM", "AVG", "MIN", "MAX"]
+        }
+      }
+    }
+  }
+}

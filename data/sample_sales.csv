@@ -1,0 +1,16 @@
+date,region,account,product,revenue,units
+2025-01-01,North,Acme Corp,Widget A,1500.00,150
+2025-01-05,South,Globex,Widget B,2000.00,100
+2025-01-10,North,Initech,Widget A,1200.00,120
+2025-02-01,East,Soylent,Widget C,3500.00,70
+2025-02-15,West,Stark Ind,Widget B,4000.00,200
+2025-03-01,North,Acme Corp,Widget C,3000.00,60
+2025-03-10,South,Globex,Widget A,1800.00,180
+2025-03-15,East,Initech,Widget B,2500.00,125
+2025-04-01,West,Soylent,Widget A,2200.00,220
+2025-04-05,North,Stark Ind,Widget C,4500.00,90
+2025-04-20,South,Acme Corp,Widget B,2100.00,105
+2025-05-01,East,Globex,Widget A,1600.00,160
+2025-05-10,West,Initech,Widget C,3200.00,64
+2025-06-01,North,Soylent,Widget B,2800.00,140
+2025-06-15,South,Stark Ind,Widget A,1900.00,190

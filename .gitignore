@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment Variables
+.env
+.env.local
+
+# Logs and Databases
+*.log
+*.db
+*.duckdb
+
+# Editor/OS specific
+.vscode/
+.idea/
+.DS_Store
