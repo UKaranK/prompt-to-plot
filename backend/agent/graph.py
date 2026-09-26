@@ -90,13 +90,18 @@ def validate_and_retrieve_node(state: AgentState):
 
 def select_visualization_node(state: AgentState):
     viz = viz_select(state.get("query_result", []), state.get("intent", ""))
-    return {"visualization": viz, "status": "viz_selected"}
+    return {"visualization": viz}
 
 def generate_insight_node(state: AgentState):
     # Pass a summary of data to prevent blowing up LLM context if it's large
-    data_str = str(state.get("query_result", []))[:2000]
+    data = state.get("query_result", [])
+    if len(data) > 15:
+        data_str = f"Showing top 15 of {len(data)} rows: {data[:15]}"
+    else:
+        data_str = str(data)
+        
     insight = insight_generate(state.get("intent", ""), data_str)
-    return {"insights": insight, "status": "insight_generated"}
+    return {"insights": insight}
 
 # 3. Define Conditional Edges
 def should_retry(state: AgentState):
@@ -113,6 +118,10 @@ def check_errors(state: AgentState):
         return "fail"
     return "continue"
 
+# Dummy node to fan-out to parallel tasks
+def fan_out_node(state: AgentState):
+    return {"status": "processing_outputs"}
+
 # 4. Build the LangGraph Workflow
 workflow = StateGraph(AgentState)
 
@@ -121,6 +130,7 @@ workflow.add_node("understand_intent", understand_intent_node)
 workflow.add_node("lookup_semantics", lookup_semantics_node)
 workflow.add_node("generate_sql", generate_sql_node)
 workflow.add_node("validate_and_retrieve", validate_and_retrieve_node)
+workflow.add_node("fan_out", fan_out_node)
 workflow.add_node("select_visualization", select_visualization_node)
 workflow.add_node("generate_insight", generate_insight_node)
 
@@ -137,13 +147,17 @@ workflow.add_conditional_edges(
     "validate_and_retrieve",
     should_retry,
     {
-        "continue": "select_visualization",
+        "continue": "fan_out",
         "retry": "generate_sql",
         "fail": END
     }
 )
 
-workflow.add_edge("select_visualization", "generate_insight")
+# Run visualization and insight generation in parallel
+workflow.add_edge("fan_out", "select_visualization")
+workflow.add_edge("fan_out", "generate_insight")
+
+workflow.add_edge("select_visualization", END)
 workflow.add_edge("generate_insight", END)
 
 # Compile into an executable agent

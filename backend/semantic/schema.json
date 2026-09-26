@@ -18,13 +18,13 @@
         "account": {
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "The name of the customer company",
+          "description": "The name of the customer company (e.g., Acme Corp, Globex, Initech, Soylent, Stark Ind)",
           "synonyms": ["customer", "client", "company", "buyer"]
         },
         "product": {
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "The item that was sold",
+          "description": "The item that was sold (e.g., Widget A, Widget B, Widget C)",
           "synonyms": ["item", "widget", "goods"]
         },
         "revenue": {

@@ -25,13 +25,16 @@ def sanitize_prompt(prompt: str) -> str:
         "you are a",
         "forget all",
         "bypass",
-        "sudo"
+        "sudo",
+        "delete",
+        "drop",
+        "trick"
     ]
     
     for pattern in injection_patterns:
         if pattern in prompt_lower:
             logger.warning(f"Prompt injection detected using pattern: '{pattern}'")
-            raise SecurityViolation("Malicious input detected. Request blocked.")
+            raise SecurityViolation("🚨 WARNING: Do not try to trick me! I am a strong AI agent built with strict security hooks. Your malicious intent has been blocked.")
             
     return prompt
 
