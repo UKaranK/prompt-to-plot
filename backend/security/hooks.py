@@ -52,7 +52,7 @@ def sanitize_prompt(prompt: str) -> str:
     for pattern in INJECTION_PATTERNS:
         if pattern in prompt_lower:
             logger.warning(f"Hook decision: DENY — injection pattern '{pattern}'")
-            raise SecurityViolation(f"Malicious input detected: pattern '{pattern}' is not allowed.")
+            raise SecurityViolation(f"🚨 WARNING: Do not try to trick me! I am a strong AI agent built with strict security hooks. Malicious input detected: pattern '{pattern}' is not allowed.")
 
     for pattern in AMBIGUOUS_PATTERNS:
         if re.search(pattern, prompt_lower):

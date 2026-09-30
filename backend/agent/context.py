@@ -18,6 +18,7 @@ def _sanitize(state: Dict[str, Any]) -> Dict[str, Any]:
         del clean["query_result"]
     clean.pop("api_key", None)
     clean.pop("gemini_api_key", None)
+    clean.pop("trace", None)
     return clean
 
 
