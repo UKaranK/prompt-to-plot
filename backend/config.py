@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     # DB Settings
     duckdb_path: str = "data/sales.duckdb"
 
+    # Agent Settings
+    agent_time_budget_seconds: int = 120
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

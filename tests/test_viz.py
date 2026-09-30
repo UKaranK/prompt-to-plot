@@ -41,9 +41,36 @@ def test_scatter_selection():
 
 def test_table_fallback():
     data = [
-        {"col1": 1, "col2": 2, "col3": 3, "col4": 4}
+        {"col1": 1, "col2": 2, "col3": 3, "col4": 4},
+        {"col1": 5, "col2": 6, "col3": 7, "col4": 8}
     ]
     intent = {"intent": "Give me everything"}
     viz = select_visualization(intent, data)
     assert viz["chart_type"] == "table"
     assert "columns" in viz
+
+def test_empty_data_returns_empty_chart():
+    """Test that empty query results return the empty chart type with a message."""
+    viz = select_visualization({"intent": "anything"}, [])
+    assert viz["chart_type"] == "empty"
+    assert "message" in viz
+    assert viz["plotly_json"] is None
+
+def test_donut_chart_selection():
+    """Test that part-to-whole intent triggers a donut chart."""
+    data = [
+        {"region": "North", "revenue": 1000},
+        {"region": "South", "revenue": 2000}
+    ]
+    intent = {"intent": "Show revenue breakdown by region"}
+    viz = select_visualization(intent, data)
+    assert viz["chart_type"] == "donut"
+    assert viz["plotly_json"] is not None
+
+def test_multi_kpi_selection():
+    """Test that a single row with multiple numeric columns renders as multi-KPI."""
+    data = [{"total_revenue": 5000, "total_units": 200}]
+    intent = {"intent": "Show overall KPIs"}
+    viz = select_visualization(intent, data)
+    assert viz["chart_type"] == "multi_kpi"
+    assert viz["plotly_json"] is not None

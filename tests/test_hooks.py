@@ -1,5 +1,5 @@
 import pytest
-from backend.security.hooks import sanitize_prompt, validate_sql, validate_tool_output, SecurityViolation
+from backend.security.hooks import sanitize_prompt, validate_sql, validate_tool_output, SecurityViolation, AmbiguousPromptError
 
 def test_sanitize_prompt_valid():
     """Test that normal business questions pass without issue."""
@@ -41,10 +41,20 @@ def test_validate_sql_not_select():
         
 def test_validate_tool_output_truncation():
     """Test that returning massive datasets truncates safely to protect context window."""
-    # Create 150 dummy rows
     data = [{"id": i} for i in range(150)]
-    
     validated = validate_tool_output(data, max_rows=100)
     assert len(validated) == 100
     assert validated[0]["id"] == 0
-    assert validated[-1]["id"] == 99  # Ensured it truncated the tail
+    assert validated[-1]["id"] == 99
+
+def test_validate_tool_output_empty():
+    """Test that empty results pass through without error."""
+    assert validate_tool_output([]) == []
+
+def test_sanitize_prompt_ambiguous():
+    """Test that vague prompts are caught by ambiguity detection."""
+    with pytest.raises(AmbiguousPromptError):
+        sanitize_prompt("How are things")
+
+    with pytest.raises(AmbiguousPromptError):
+        sanitize_prompt("Show me everything")

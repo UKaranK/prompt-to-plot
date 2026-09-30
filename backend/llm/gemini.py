@@ -1,8 +1,13 @@
 import logging
 from google import genai
+from google.genai import types
 from google.genai.errors import APIError
 from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
 from backend.config import settings
+
+# Hard caps to prevent unbounded resource consumption (CWE-400, CWE-770)
+MAX_INPUT_CHARS = 8000
+MAX_OUTPUT_TOKENS = 1024
 
 # Setup basic logging
 logging.basicConfig(level=logging.INFO)
@@ -39,11 +44,18 @@ class LLMClient:
         Sends a prompt to the Gemini model and returns the generated text.
         Automatically retries with exponential backoff if the API is overloaded.
         """
+        # Bound input size to prevent cost amplification
+        if len(prompt) > MAX_INPUT_CHARS:
+            logger.warning(f"Prompt truncated from {len(prompt)} to {MAX_INPUT_CHARS} chars.")
+            prompt = prompt[:MAX_INPUT_CHARS]
+
         try:
-            # Send the request over the network using the new models.generate_content API
             response = self.client.models.generate_content(
                 model=self.model_name,
-                contents=prompt
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    max_output_tokens=MAX_OUTPUT_TOKENS,
+                )
             )
             
             # Extract and return the text

@@ -14,15 +14,12 @@ def run():
     try:
         final_merged_state = initial_state.copy()
         for s in agent_app.stream(initial_state):
-            # Stream yields the state updates from each node as they complete
             node_name = list(s.keys())[0]
             state_data = s[node_name]
-            
-            # Merge the partial update into our full state
             final_merged_state.update(state_data)
-            
+
             print(f"-> Finished Node: [{node_name}]")
-            
+
             if node_name == "lookup_semantics":
                 print(f"   Mapped Semantics: Found {len(state_data.get('semantic_mapping', ''))} characters of schema.")
             elif node_name == "generate_sql":
@@ -39,11 +36,11 @@ def run():
         print(f"Suggested Chart: {final_merged_state.get('visualization')}")
         print(f"Insight: {final_merged_state.get('insights')}")
         
-        # Save the trace using the Journal
-        from backend.agent.context import AgentJournal
-        journal = AgentJournal()
-        trace_path = journal.save_trace(final_merged_state)
-        print(f"\nExecution Trace saved to: {trace_path}")
+        # Save the trace via AgentTrace carried in state
+        trace = final_merged_state.get("trace")
+        if trace:
+            trace_path = trace.save(final_merged_state)
+            print(f"\nExecution Trace saved to: {trace_path}")
         
     except Exception as e:
         print(f"\nAgent Failed with exception: {e}")

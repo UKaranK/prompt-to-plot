@@ -21,29 +21,28 @@ class Database:
     Manages the local DuckDB instance and provides safe access to the data.
     """
     def __init__(self):
-        # We assume the script is run from the project root.
         self.db_path = settings.duckdb_path
-        
-        # Go up two directories from backend/data/database.py to find the data folder
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         self.csv_path = os.path.join(base_dir, "data", "sample_sales.csv")
-        
-        # Ensure the data directory exists before connecting
-        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
-        
-        # Connect to DuckDB (creates the .duckdb file if it doesn't exist)
-        self.conn = duckdb.connect(database=self.db_path, read_only=False)
-        self._initialize_db()
 
-    def _initialize_db(self):
-        """Loads the raw CSV into a DuckDB table named 'sales'."""
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+
+        # One-time init: if the db file doesn't exist yet, create and populate it,
+        # then immediately close the write connection.
+        if not os.path.exists(self.db_path):
+            init_conn = duckdb.connect(database=self.db_path, read_only=False)
+            self._initialize_db(init_conn)
+            init_conn.close()
+
+        # All query execution uses a read-only connection (matches threat model)
+        self.conn = duckdb.connect(database=self.db_path, read_only=True)
+
+    def _initialize_db(self, conn):
+        """Loads the raw CSV into a DuckDB table named 'sales'. Requires a write connection."""
         if not os.path.exists(self.csv_path):
             raise DatabaseConfigError(f"Could not find sample dataset at {self.csv_path}")
-
         try:
-            # We use CREATE TABLE IF NOT EXISTS so we don't duplicate data on restart.
-            # read_csv_auto automatically infers schema (dates, numbers, strings).
-            self.conn.execute(f"CREATE TABLE IF NOT EXISTS sales AS SELECT * FROM read_csv_auto('{self.csv_path}')")
+            conn.execute(f"CREATE TABLE IF NOT EXISTS sales AS SELECT * FROM read_csv_auto('{self.csv_path}')")
             logger.info("Database initialized successfully with 'sales' table.")
         except Exception as e:
             logger.error(f"Failed to initialize database: {e}")

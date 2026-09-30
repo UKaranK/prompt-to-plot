@@ -1,4 +1,26 @@
 {
+  "kpis": {
+    "total_revenue": {
+      "description": "Sum of all revenue across all transactions",
+      "sql": "SELECT SUM(revenue) AS total_revenue FROM sales"
+    },
+    "total_units": {
+      "description": "Sum of all units sold across all transactions",
+      "sql": "SELECT SUM(units) AS total_units FROM sales"
+    },
+    "average_revenue": {
+      "description": "Average revenue per transaction",
+      "sql": "SELECT AVG(revenue) AS average_revenue FROM sales"
+    }
+  },
+  "date_filters": {
+    "this year": "YEAR(date) = YEAR(CURRENT_DATE)",
+    "last year": "YEAR(date) = YEAR(CURRENT_DATE) - 1",
+    "this month": "YEAR(date) = YEAR(CURRENT_DATE) AND MONTH(date) = MONTH(CURRENT_DATE)",
+    "last month": "date >= DATE_TRUNC('month', CURRENT_DATE) - INTERVAL 1 MONTH AND date < DATE_TRUNC('month', CURRENT_DATE)",
+    "last quarter": "date >= DATE_TRUNC('quarter', CURRENT_DATE) - INTERVAL 3 MONTH AND date < DATE_TRUNC('quarter', CURRENT_DATE)",
+    "this quarter": "date >= DATE_TRUNC('quarter', CURRENT_DATE) AND date < DATE_TRUNC('quarter', CURRENT_DATE) + INTERVAL 3 MONTH"
+  },
   "tables": {
     "sales": {
       "description": "Sales transaction data including revenue and units sold by region and product",
@@ -7,38 +29,38 @@
           "type": "DATE",
           "role": "dimension",
           "description": "The date of the transaction",
-          "synonyms": ["time", "day", "month", "year", "when"]
+          "synonyms": ["time", "day", "month", "year", "when", "period", "quarter"]
         },
         "region": {
           "type": "VARCHAR",
           "role": "dimension",
           "description": "The geographical region of the sale (e.g., North, South)",
-          "synonyms": ["area", "location", "territory"]
+          "synonyms": ["area", "location", "territory", "geography", "geo"]
         },
         "account": {
           "type": "VARCHAR",
           "role": "dimension",
           "description": "The name of the customer company (e.g., Acme Corp, Globex, Initech, Soylent, Stark Ind)",
-          "synonyms": ["customer", "client", "company", "buyer"]
+          "synonyms": ["customer", "client", "company", "buyer", "account name"]
         },
         "product": {
           "type": "VARCHAR",
           "role": "dimension",
           "description": "The item that was sold (e.g., Widget A, Widget B, Widget C)",
-          "synonyms": ["item", "widget", "goods"]
+          "synonyms": ["item", "widget", "goods", "sku", "product name"]
         },
         "revenue": {
           "type": "DOUBLE",
           "role": "measure",
           "description": "The total monetary value of the sale",
-          "synonyms": ["sales", "income", "money", "value", "sales amount"],
+          "synonyms": ["sales", "income", "money", "value", "sales amount", "earnings", "turnover"],
           "allowed_aggregations": ["SUM", "AVG", "MIN", "MAX"]
         },
         "units": {
           "type": "INTEGER",
           "role": "measure",
           "description": "The physical number of items sold",
-          "synonyms": ["quantity", "volume", "amount sold", "count"],
+          "synonyms": ["quantity", "volume", "amount sold", "count", "number sold"],
           "allowed_aggregations": ["SUM", "AVG", "MIN", "MAX"]
         }
       }

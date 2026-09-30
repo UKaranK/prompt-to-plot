@@ -1,0 +1,121 @@
+{
+    "session_id": "2848442085632",
+    "started_at": "2026-09-28T17:22:37.283795+00:00",
+    "completed_at": "2026-09-28T17:23:45.710599+00:00",
+    "final_status": "insight_generated",
+    "sql_retries": 0,
+    "generated_sql": "SELECT region, SUM(revenue) AS total_revenue FROM sales GROUP BY region ORDER BY total_revenue DESC LIMIT 5",
+    "errors": "",
+    "events": [
+        {
+            "timestamp": "2026-09-28T17:22:37.284435+00:00",
+            "step": "validate_input",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "sanitize_prompt",
+            "tool_arguments": {
+                "prompt": "Show me the top 5 regions by revenue."
+            },
+            "hook_decision": "ALLOW"
+        },
+        {
+            "timestamp": "2026-09-28T17:23:14.140688+00:00",
+            "step": "understand_intent",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "gemini.generate_response",
+            "tool_arguments": {
+                "prompt_length": 356
+            },
+            "tool_result": {
+                "dimensions": [
+                    "region"
+                ],
+                "measures": [
+                    "revenue"
+                ],
+                "filters": []
+            }
+        },
+        {
+            "timestamp": "2026-09-28T17:23:14.142163+00:00",
+            "step": "lookup_semantics",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "semantic_lookup",
+            "tool_arguments": {
+                "search_term": "region revenue"
+            },
+            "tool_result": {
+                "mapping_length": 1577
+            },
+            "hook_decision": "ALLOW"
+        },
+        {
+            "timestamp": "2026-09-28T17:23:23.262386+00:00",
+            "step": "generate_sql",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "query_generate",
+            "tool_arguments": {
+                "intent": "Show me the top 5 regions by revenue.",
+                "retry": 0
+            },
+            "tool_result": {
+                "sql": "SELECT region, SUM(revenue) AS total_revenue FROM sales GROUP BY region ORDER BY total_revenue DESC LIMIT 5"
+            }
+        },
+        {
+            "timestamp": "2026-09-28T17:23:23.263709+00:00",
+            "step": "validate_sql",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "validate_sql",
+            "tool_arguments": {
+                "sql": "SELECT region, SUM(revenue) AS total_revenue FROM sales GROUP BY region ORDER BY total_revenue DESC LIMIT 5"
+            },
+            "hook_decision": "ALLOW"
+        },
+        {
+            "timestamp": "2026-09-28T17:23:23.298969+00:00",
+            "step": "validate_and_retrieve",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "data_retrieve",
+            "tool_result": {
+                "rows": 4
+            },
+            "hook_decision": "ALLOW"
+        },
+        {
+            "timestamp": "2026-09-28T17:23:23.685250+00:00",
+            "step": "select_visualization",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "viz_select",
+            "tool_result": {
+                "chart_type": "bar"
+            }
+        },
+        {
+            "timestamp": "2026-09-28T17:23:45.709255+00:00",
+            "step": "generate_insight",
+            "status": "success",
+            "retry_count": 0,
+            "tool_called": "insight_generate",
+            "tool_result": {
+                "insight_keys": [
+                    "fact",
+                    "insight",
+                    "action"
+                ]
+            }
+        }
+    ],
+    "final_state_summary": {
+        "user_prompt": "Show me the top 5 regions by revenue.",
+        "sql_retries": 0,
+        "errors": "",
+        "status": "insight_generated",
+        "session_start_time": 1790616157.2844431,
+        "trace": 
